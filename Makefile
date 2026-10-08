@@ -1,19 +1,43 @@
+# Compiler
 CC = gcc
-CFLAGS = -std=c99 -pedantic -Werror -Wall -Wextra -Wvla
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -Werror -Wvla
 
-TARGET = src/tinyprintf.o
+# Source and object files
+SRC = src/tinyprintf.c src/display.c src/convert.c \
+		src/utils.c
 
-all: $(TARGET)
+OBJ = $(SRC:.c=.o)
 
-$(TARGET): src/tinyprintf.c src/display.c src/convert.c src/utils.c
-	$(CC) $(CFLAGS) -c src/tinyprintf.c -o src/tinyprintf.o
-	$(CC) $(CFLAGS) -c src/display.c -o src/display.o
-	$(CC) $(CFLAGS) -c src/convert.c -o src/convert.o
-	$(CC) $(CFLAGS) -c src/utils.c -o src/utils.o
+# Executable
+TARGET = tests/tests
 
+# Compile the project
+all: $(OBJ)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Run the tests
 check: $(TARGET)
-	$(CC) $(CFLAGS) tests/tests.c src/*.o -o tests/tests -lcriterion
-	./tests/tests
+	./$(TARGET)
 
+$(TARGET): tests/tests.c $(OBJ)
+	$(CC) $(CFLAGS) tests/tests.c $(OBJ) -o $(TARGET) -lcriterion
+
+# Format the files
+format:
+	clang-format -i $(SRC) src/*.h tests/tests.c
+
+check-format:
+	clang-format --dry-run -Werror $(SRC) src/*.h tests/tests.c
+
+# Clean generated files
 clean:
-	$(RM) src/*.o tests/tests
+	rm -f $(OBJ)
+	rm -f $(TARGET)
+
+fclean: clean
+
+re: fclean all
+
+.PHONY: all check format check-format clean fclean re

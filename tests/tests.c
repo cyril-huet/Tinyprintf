@@ -2,6 +2,7 @@
 #include <criterion/new/assert.h>
 #include <criterion/redirect.h>
 #include <stdio.h>
+
 #include "../src/tinyprintf.h"
 
 static void redirect_all_stdout(void)

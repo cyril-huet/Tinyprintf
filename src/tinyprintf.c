@@ -35,7 +35,10 @@ int tinyprintf(const char *format, ...)
                 else if (format[i + 1] == 'o')
                     res += displayoctal(va_arg(args, long long));
                 else if (format[i + 1] == '%')
-                    res += putchar('%');
+                {
+                    putchar('%');
+                    res++;
+                }
                 else
                 {
                     putchar('%');

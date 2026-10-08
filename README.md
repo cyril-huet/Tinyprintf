@@ -98,9 +98,7 @@ Tinyprintf is a function library and does not contain a `main` function.
 A small example program can be compiled with:
 
 ```sh
-gcc -std=c99 -Wall -Wextra -Werror \
-    example.c src/*.c \
-    -o example
+gcc -std=c99 -Wall -Wextra -Werror example.c src/*.c -o example
 ```
 
 Example source file:
